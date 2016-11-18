@@ -1,4 +1,4 @@
 #include <stdio.h>
-#inlcude <stdlib.h>
-#inlcude <windows.h>
+#inclde <stdlib.h>
+#include <windows.h>
 
