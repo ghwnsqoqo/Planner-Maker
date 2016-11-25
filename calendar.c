@@ -7,6 +7,7 @@ void textcolor(int color_number)
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color_number);
 }
 
+void textcolor(int color_number);
 
 void calendarimg()
 {
@@ -49,6 +50,7 @@ void calendarimg()
 void calendar()
 {
 	system("cls");
+	today();
 	int year, month = 0;
 	int totalday[] = { 0,31,28,31,30,31,30,31,31,30,31,30,31 };
 	int lastyear, day, i;
@@ -69,7 +71,7 @@ void calendar()
 	printf("\n");
 	Sleep(1000);
 	system("cls");
-	
+	today();
 	if (month == 2 && leapyear(year))	//¿±≥‚∆«¥‹
 		totalday[2] = 29;
 
