@@ -6,11 +6,18 @@ char select_menu(void)
 	char ch; //키보드에서 입력받은 문자열을 저장할 변수 선언.
 	int i;
 	calendarimg();
+	Sleep(900);
+	textcolor(14);
 	printf("\n======================================================================================");
+	Sleep(100);
 	printf("\n======================================================================================");
+	Sleep(200);
+	textcolor(12);
 	for (i = 0; i < sizeof(smenu) / sizeof(smenu[0]); i++)
 	{
+	
 		printf("\n\n%s", smenu[i]);	//메뉴출력
+		Sleep(200);
 	}
 	printf("\n\n\t\t\t\t메뉴를 선택해주세요 : ");
 	do 
