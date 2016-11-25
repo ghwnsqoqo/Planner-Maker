@@ -1,4 +1,4 @@
 #include <stdio.h>
-#inclde <stdlib.h>
+#include <stdlib.h>
 #include <windows.h>
 
