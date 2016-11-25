@@ -12,7 +12,7 @@ char select_menu(void)
 	Sleep(100);
 	printf("\n======================================================================================");
 	Sleep(200);
-	textcolor(12);
+	textcolor(15);
 	for (i = 0; i < sizeof(smenu) / sizeof(smenu[0]); i++)
 	{
 	
@@ -26,5 +26,5 @@ char select_menu(void)
 		fflush(stdin); //엔터를누르면 버퍼를 읽어옴
 	} while (ch<'1' || ch>'2'); //선택한 메뉴가 1~2 사이가 아닐경우 다시 입력을받음
 		return ch; //선택한 메뉴의 함수의 결과값으로 되돌림;
-
+		
 }
