@@ -25,7 +25,10 @@ void Exit();
 
 void memo_menu()
 {	
-	
+	system("cls");
+	today();
+	calendar_p();
+
 	node *head = NULL;	//헤드 포인터 선언
 	int num = 0;
 	int in = 0;

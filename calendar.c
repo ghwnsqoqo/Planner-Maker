@@ -1,13 +1,18 @@
 #include "common.h"
+#include "selectmenu.h"
 #define leapyear(year) ((year)%4==0 && ((year)%100!=0||(year)%400==0))	//윤년판단매크로
 void SetConsoleTextColor(int bgcolor, int color);	//console 글씨색상을 바꾸는 함수
-void memo();	//일정 등록 함수
+
 void textcolor(int color_number)
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color_number);
 }
-
 void textcolor(int color_number);
+
+void Exit();
+void d_day();
+void memo_menu();
+void calendar_p();	//달력모양출력함수
 
 void calendarimg()
 {
@@ -47,17 +52,17 @@ void calendarimg()
 
 }
 
-void calendar()
+int year, month = 0;
+int totalday[] = { 0,31,28,31,30,31,30,31,31,30,31,30,31 };
+int lastyear, day, i;
+
+void calendar()	//달력정보를 입력받는함수
 {
 	system("mode con:cols=100 lines=30");
 	system("cls");
 	today();
-	int year, month = 0;
-	int totalday[] = { 0,31,28,31,30,31,30,31,31,30,31,30,31 };
-	int lastyear, day, i;
-	
-	FILE * fp = fopen("calendar.txt", "wt"); //calendar.txt에출력하기위해오픈한다.
 
+	
 	printf("몇년(年)의 달력을 출력하시겠습니까 ? ");
 	scanf("%d", &year);
 	printf("몇월(月)의 달력을 출력하시겠습니까 ? ");
@@ -67,73 +72,91 @@ void calendar()
 	{
 		Sleep(100);
 		printf("..");
-		
 	}
 	printf("\n");
 	Sleep(1000);
 	system("cls");
 	today();
+	calendar_p();
+
+//메뉴부분진입	
+	while (1)
+	{
+		char ch2 = function_select_menu();
+		switch (ch2)
+		{
+		case'1': memo_menu();	break;
+		case'2': d_day();	break;
+		case'3': Exit();	exit(0);
+		}
+	}
+}
+
+
+void calendar_p()
+{
+	
+	FILE * fp = fopen("calendar.txt", "wt"); //calendar.txt에출력하기위해오픈한다.
+
 	if (month == 2 && leapyear(year))	//윤년판단
 		totalday[2] = 29;
 
-		lastyear = year - 1;
+	lastyear = year - 1;
 	{
-			day = (lastyear + (lastyear / 4) - (lastyear / 100) + (lastyear / 400) + 1) % 7;
+		day = (lastyear + (lastyear / 4) - (lastyear / 100) + (lastyear / 400) + 1) % 7;
 
-			for (i = 1; i < month; i++)
-			{
-				day += totalday[i];
-				day %= 7;
-			}
-			//console에 출력
-			printf("\n\t\t\t\t");
-			SetConsoleTextColor(0x0, 0xe);	//노란색글씨로 바꾼다.
-			printf("\t\t%d년 %d월\n\n", year, month);
-			SetConsoleTextColor(0x0, 0xc);	//빨간색글씨로바꾼다.
-			printf("\n\t\t\t  일");
-			SetConsoleTextColor(0x0, 0xf);	//흰색글씨로 복귀
-			printf("\t  월\t  화\t  수\t  목\t  금");
-			SetConsoleTextColor(0x0, 0x9);	//파란색글씨로 바꾼다.
-			printf("\t  토");
-						
-			
-			SetConsoleTextColor(0x0, 0xe);	//노란색글씨로 바꾼다.
-			printf("\n\t\t\t  ===================================================");
+		for (i = 1; i < month; i++)
+		{
+			day += totalday[i];
+			day %= 7;
+		}
+		//console에 출력
+		printf("\n\t\t\t\t");
+		SetConsoleTextColor(0x0, 0xe);	//노란색글씨로 바꾼다.
+		printf("\t\t%d년 %d월\n\n", year, month);
+		SetConsoleTextColor(0x0, 0xc);	//빨간색글씨로바꾼다.
+		printf("\n\t\t\t  일");
+		SetConsoleTextColor(0x0, 0xf);	//흰색글씨로 복귀
+		printf("\t  월\t  화\t  수\t  목\t  금");
+		SetConsoleTextColor(0x0, 0x9);	//파란색글씨로 바꾼다.
+		printf("\t  토");
 
-			fprintf(fp, "\n			%d년%d월\n", year, month);
-			fprintf(fp, "\n일\t월화\t수\t목\t금\t토");
-			SetConsoleTextColor(0x0, 0xf);	//하얀색글씨로복귀
-			for (i = -day; i<totalday[month]; i++)
+
+		SetConsoleTextColor(0x0, 0xe);	//노란색글씨로 바꾼다.
+		printf("\n\t\t\t  ===================================================");
+
+		fprintf(fp, "\n			%d년%d월\n", year, month);
+		fprintf(fp, "\n일\t월화\t수\t목\t금\t토");
+		SetConsoleTextColor(0x0, 0xf);	//하얀색글씨로복귀
+		for (i = -day; i < totalday[month]; i++)
+		{
+			if ((i + day) % 7 == 0)
 			{
-				if ((i + day) % 7 == 0)
-				{
-					printf("\n\t\t\t");
-					fprintf(fp, "\n");
-				}
-				if (i < 0)
-				{
-					printf("\t");
-					fprintf(fp, "		");
-				}
-				else
-				{
-					//토요일의 경우 파란색으로 출력한다.
-					if ((i + day) % 7 == 6)	SetConsoleTextColor(0x0, 0x9);
-					//일요일의 경우 빨간색으로 출력한다.
-					if ((i + day) % 7 == 0) SetConsoleTextColor(0x0, 0xc);	printf("%4d\t", i + 1);
-					//흰색글씨로 복귀
-					SetConsoleTextColor(0x0, 0xf);
-					fprintf(fp, "%4d", i + 1);
-				}
+				printf("\n\t\t\t");
+				fprintf(fp, "\n");
 			}
+			if (i < 0)
+			{
+				printf("\t");
+				fprintf(fp, "		");
+			}
+			else
+			{
+				//토요일의 경우 파란색으로 출력한다.
+				if ((i + day) % 7 == 6)	SetConsoleTextColor(0x0, 0x9);
+				//일요일의 경우 빨간색으로 출력한다.
+				if ((i + day) % 7 == 0) SetConsoleTextColor(0x0, 0xc);	printf("%4d\t", i + 1);
+				//흰색글씨로 복귀
+				SetConsoleTextColor(0x0, 0xf);
+				fprintf(fp, "%4d", i + 1);
+			}
+		}
 	}
+
 	printf("\n\n");
 	fprintf(fp, "\n\n");
 	fclose(fp);
-	
-	memo_menu();
 }
-
 void SetConsoleTextColor(int bgcolor, int color)	
 {
 	bgcolor &= 0xf;

@@ -1,1 +1,9 @@
-//d-dayê¸°ëŠ¥êµ¬í˜„
+#include "common.h"
+
+void d_day();
+
+void d_day()
+{
+	printf("±â´É±¸ÇöÁ»");
+}
+
