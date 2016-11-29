@@ -49,8 +49,18 @@ void memo_menu()
 		char ch1 = schedule_select_menu();
 		switch (ch1)
 		{
-		case'1': Insert(&head, Createnode());	break;
-		case'2': Delete(&head, search(head));	break;
+		case'1': Insert(&head, Createnode());
+				 Sleep(1000); 
+				 system("cls");
+				 today();
+				 calendar_p();
+				 break;
+		case'2': Delete(&head, search(head));
+				 Sleep(1000);
+				 system("cls");
+				 today();
+				 calendar_p();
+				 break;
 		case'3': se = search(head);
 			if (se != NULL)
 				{
@@ -61,9 +71,23 @@ void memo_menu()
 				 {
 					 printf("검색할 내용이 없습니다 !\n");
 				 }
-		case'4': Display(head);	break;
+					Sleep(1000);
+					system("cls");
+					today();
+					calendar_p();
+		case'4': Display(head);	
+				 Sleep(1000);
+				 system("cls");
+				 today();
+				 calendar_p();
+				 break;
 		case'5': writefile(head);
-			printf("Scedule.txt파일로 저장이 완료되었습니다.\n"); continue;
+			printf("Scedule.txt파일로 저장이 완료되었습니다.\n"); 
+			Sleep(1000);
+			system("cls");
+			today();
+			calendar_p();
+			continue;
 		case'6': Exit();	exit(0);
 		}
 	}
