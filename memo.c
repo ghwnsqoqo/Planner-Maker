@@ -62,7 +62,7 @@ void memo_menu()
 					 printf("검색할 내용이 없습니다 !\n");
 				 }
 		case'4': Display(head);	break;
-		case'5': writefile(head);	break;
+		case'5': writefile(head);
 			printf("Scedule.txt파일로 저장이 완료되었습니다.\n"); continue;
 		case'6': Exit();	exit(0);
 		}
