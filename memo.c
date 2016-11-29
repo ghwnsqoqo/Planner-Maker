@@ -1,1 +1,177 @@
-//ì¼ì •ìž…ë ¥ë¶€ë¶„êµ¬í˜„
+#include"common.h"
+#include"schedulemenu.h"
+//ÀÏÁ¤ÀÔ·ÂºÎºÐ±¸Çö
+
+//±¸Á¶Ã¼ Á¤ÀÇ
+
+typedef struct schedule{ //¾Æ·¡ node ±¸Á¶Ã¼ ³»ÀÇ º¯¼öÁß ÇÏ³ª
+	char s_name[20];	//½ºÄÉÁÙ ÀÌ¸§
+	char s_memo[20];	//½ºÄÉÁÙ ³»¿ë
+}schedule;
+
+typedef struct node //±¸Á¶Ã¼¸¦ ³ëµå·Î °®´Â ÀÚ±â ÂüÁ¶ ±¸Á¶Ã¼ ¼±¾ð
+{
+	struct schedule data;			//½ºÄÉÁÙÀÌ¸§, ³»¿ë µ¥ÀÌÅÍ
+	struct node *next;	//¸µÅ©(±¸Á¶Ã¼nodeÀÇ ÁÖ¼Ò¸¦ ÀúÀåÇÒ Æ÷ÀÎÅÍ º¯¼ö)
+}node;
+
+node *Createnode(void);	//nodeÇÏ³ª¸¦ ¸¸µå´Â ÇÔ¼ö. insertÇÔ¼öÀÇ µÎ¹øÂ° ÀÎÀÚ·Î Àü´ÞÇÏ±âÀ§ÇØ
+void Insert(node **phead, node *newnode);	//¿¬°á¸®½ºÆ®ÀÇ ¸¶Áö¸· node¿¡ newnode¸¦ ¿¬°á½ÃÅ°´Â ÇÔ¼ö
+node *search(node *phead);		//ÀÔ·ÂÇÑ ÀÌ¸§À» °¡Áø node¸¦ Ã£´Â ÇÔ¼ö
+void Delete(node **phead, node *remove);	//remove³ëµå¸¦ searchÇÔ¼ö·Î Ã£¾Æ¼­ ÀÎÀÚ·Î Àü´ÞÇÑ´Ù
+void Display(node *head);		//¿¬°á¸®½ºÆ®ÀÇ ¸ðµç ³»¿ëÀ» Ãâ·ÂÇÏ´Â ÇÔ¼ö
+void writefile(node *phead);	//¿¬°á¸®½ºÆ®ÀÇ ³»¿ëÀ» ÀúÀåÇÏ´Â ÇÔ¼ö Æú´õ¾È¿¡ Schedule.txt¶ó´Â ÆÄÀÏ·Î ÀúÀåÀÌ µÇµµ·ÏÇß´Ù.
+void Exit();
+
+void memo_menu()
+{	
+	
+	node *head = NULL;	//Çìµå Æ÷ÀÎÅÍ ¼±¾ð
+	int num = 0;
+	int in = 0;
+	node *se;	   //switch ¹®ÀÇ case 3: ¿¡¼­ Ã£Àº ³ëµåÀÇ ÁÖ¼Ò°ªÀ» ÀÓ½Ã·Î ÀúÀåÇÏ±â À§ÇØ¼­
+	int i = 0;
+
+	FILE *des = fopen("Schedule.txt", "rt");	//ÆÄÀÏÀÇ ³»¿ëÀ» ±âÃÊ·Î ¿¬°á¸®½ºÆ® ±¸¼ºÀ» À§ÇØ ÀÔ·Â½ºÆ®¸² »ý¼º
+
+	if (des == NULL)	//ÀÔ·Â½ºÆ®¸²ÀÇ »ý¼ºÀ» È®ÀÎ
+	{
+		printf("ÆÄÀÏ ÀÐ±â ½ÇÆÐ!\n");
+		return -1;	//ºñÁ¤»óÀûÀÎ Á¾·á¸¦ ÀÇ¹Ì
+	}
+	//±¸ÇöÇÑ ¸ÞÀÎ¸Þ´ºÇì´õ ºÒ·¯¿À±â
+	
+	while (1)
+	{
+		char ch1 = schedule_select_menu();
+		switch (ch1)
+		{
+		case'1': Insert(&head, Createnode());	break;
+		case'2': Delete(&head, search(head));	break;
+		case'3': se = search(head);
+			if (se != NULL)
+				{
+					printf("ÀÏÁ¤¸í : %s\n", se->data.s_name);
+					printf("ÀÏÁ¤³»¿ë : %s\n", se->data.s_memo);
+				}
+				 else
+				 {
+					 printf("°Ë»öÇÒ ³»¿ëÀÌ ¾ø½À´Ï´Ù !\n");
+				 }
+		case'4': Display(head);	break;
+		case'5': writefile(head);	break;
+			printf("Scedule.txtÆÄÀÏ·Î ÀúÀåÀÌ ¿Ï·áµÇ¾ú½À´Ï´Ù.\n"); continue;
+		case'6': Exit();	exit(0);
+		}
+	}
+}
+
+void Insert(node **phead, node *newnode)
+{
+	node *ptr = *phead;
+	node *p;
+	if (*phead == NULL)	//¿¬°á¸®½ºÆ®¿¡ ¾Æ¹« ³»¿ëÀÌ ¾øÀ»¶§
+	{
+		(*phead) = newnode;
+		newnode->next = NULL;
+	}
+	else
+	{
+		while (ptr != NULL)	//¸¶Áö¸· ³ëµåÀÇ ÁÖ¼Ò°ªÀ» Ã£´Â ¹Ýº¹¹®
+		{
+			p = ptr;
+			ptr = ptr->next;
+		}
+		ptr = newnode;
+		p->next = ptr;	//¿¬°á¸®½ºÆ®ÀÇ ³¡¿¡ newnode¸¦ ¿¬°á
+	}
+}
+void Delete(node **phead, node*remove)
+{
+	node *ptr = *phead;
+	node *p;
+	if (ptr == NULL)
+		return;
+	else
+	{
+		if (*phead == remove)		//Ã¹¹øÂ° ³ëµå¸¦ »èÁ¦ÇÒ¶§
+		{
+			*phead = (*phead)->next;
+			free(remove);
+		}
+		else
+		{
+			while (ptr != NULL)
+			{
+				if (ptr == remove)
+				{
+					p->next = remove->next;	//remove³ëµå¸¦ ¿¬°á¸®½ºÆ®¿¡¼­ Á¦¿Ü
+					free(remove);
+					return;
+				}
+				p = ptr;
+				ptr = ptr->next;
+			}
+		}
+	}
+}
+
+node * search(node*phead)
+{
+	node *ptr = phead;
+	schedule el;
+	printf("ÀÏÁ¤¸í ÀÔ·Â:");	scanf("%s", el.s_name);
+	while (ptr != NULL)
+	{
+		if (!strcmp(ptr->data.s_name, el.s_name))	//°¢ ³ëµåÀÇ µ¥ÀÌÅÍ ³»ÀÇ ÀÌ¸§°ú Ã£À» ÀÌ¸§À» ºñ±³
+			return ptr;	//Ã£À» ÀÌ¸§À» °¡Áø ³ëµåÀÇ ÁÖ¼Ò°ªÀ» ¹ÝÈ¯
+		ptr = ptr->next;
+	}
+	return NULL;
+}
+void Display(node*head)
+{
+	int i = 1;
+	node *p = head;
+	while (p != NULL)
+	{
+		printf("%d¹øÂ°\n", i);
+		printf("ÀÏÁ¤¸í:%s\n", (p->data).s_name);
+		printf("ÀÏÁ¤³»¿ë:%s\n\n", (p->data).s_memo);
+		p = p->next;
+		i++;
+	}
+}
+
+node *Createnode(void)
+{
+	node *newnode = (node*)malloc(sizeof(node));		//»õ·Î¿î ³ëµå »ý¼º
+	printf("ÀÏÁ¤¸í ÀÔ·Â:");	scanf("%s", (newnode->data).s_name);	//ÀÏÁ¤¸í ÀÔ·Â
+	printf("ÀÏÁ¤³»¿ë ÀÔ·Â:");	scanf("%s", (newnode->data).s_memo);	//ÀÏÁ¤³»¿ë ÀÔ·Â
+	newnode->next = NULL;
+	return newnode;	//newnode ÀÇ ÁÖ¼Ò°ªÀ» ¹ÝÈ¯
+}
+
+void writefile(node *phead)
+{
+	node *ptr = phead;
+	int i = '1';
+	FILE *des = fopen("Schedule.txt", "wt");	//Ãâ·Â ½ºÆ®¸² Çü¼º
+
+	if (ptr == NULL)
+		return;
+	else
+	{
+		while (ptr != NULL)
+		{
+			fputc(i, des); fputs("¹øÂ°\n", des);
+			fputs("ÀÏÁ¤¸í:", des); fputs(ptr->data.s_name, des); fputs("\n", des);
+			fputs("ÀÏÁ¤³»¿ë:", des); fputs(ptr->data.s_memo, des); fputs("\n", des);
+			ptr = ptr->next;
+			i++;
+		}
+	}
+	fclose(des);
+	return;
+
+}

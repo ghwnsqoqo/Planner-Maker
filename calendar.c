@@ -49,6 +49,7 @@ void calendarimg()
 
 void calendar()
 {
+	system("mode con:cols=100 lines=30");
 	system("cls");
 	today();
 	int year, month = 0;
@@ -85,28 +86,28 @@ void calendar()
 				day %= 7;
 			}
 			//console에 출력
-			printf("\n\t");
+			printf("\n\t\t\t\t");
 			SetConsoleTextColor(0x0, 0xe);	//노란색글씨로 바꾼다.
-			printf("\t\t%d년 %d월\n", year, month);
+			printf("\t\t%d년 %d월\n\n", year, month);
 			SetConsoleTextColor(0x0, 0xc);	//빨간색글씨로바꾼다.
-			printf("\n   일");
+			printf("\n\t\t\t  일");
 			SetConsoleTextColor(0x0, 0xf);	//흰색글씨로 복귀
 			printf("\t  월\t  화\t  수\t  목\t  금");
 			SetConsoleTextColor(0x0, 0x9);	//파란색글씨로 바꾼다.
 			printf("\t  토");
 						
 			
-			SetConsoleTextColor(0x0, 0xf);	//하얀색글씨로복귀
-			printf("\n  ===================================================");
+			SetConsoleTextColor(0x0, 0xe);	//노란색글씨로 바꾼다.
+			printf("\n\t\t\t  ===================================================");
 
 			fprintf(fp, "\n			%d년%d월\n", year, month);
 			fprintf(fp, "\n일\t월화\t수\t목\t금\t토");
-
+			SetConsoleTextColor(0x0, 0xf);	//하얀색글씨로복귀
 			for (i = -day; i<totalday[month]; i++)
 			{
 				if ((i + day) % 7 == 0)
 				{
-					printf("\n");
+					printf("\n\t\t\t");
 					fprintf(fp, "\n");
 				}
 				if (i < 0)
@@ -130,7 +131,7 @@ void calendar()
 	fprintf(fp, "\n\n");
 	fclose(fp);
 	
-	memo();
+	memo_menu();
 }
 
 void SetConsoleTextColor(int bgcolor, int color)	
@@ -140,15 +141,5 @@ void SetConsoleTextColor(int bgcolor, int color)
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (bgcolor << 4) | color);
 }
 
-
-
-
-
-void memo()
-{
-	int day;
-	printf("무엇을만들까 : ");
-	scanf("%d",&day);
-}
 
 

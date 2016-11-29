@@ -1,1 +1,32 @@
-//ìŠ¤ì¼€ì¥´ë©”ë‰´ë¶€ë¶„êµ¬í˜„
+//½ºÄÉÁì¸Ş´ººÎºĞ±¸Çö
+#pragma
+char *s_smenu[] = {"1. ÀÏÁ¤ÀÔ·Â", "2. ÀÏÁ¤»èÁ¦", "3. ÀÏÁ¤°Ë»ö", "4. ÀÏÁ¤Ãâ·Â", "5. ÀÏÁ¤ÀúÀå", "6. ³ª°¡±â"};
+
+char schedule_select_menu(void)
+{
+	char ch1; //Å°º¸µå¿¡¼­ ÀÔ·Â¹ŞÀº ¹®ÀÚ¿­À» ÀúÀåÇÒ º¯¼ö ¼±¾ğ.
+	int i;
+
+	printf("\t\t\t\t");
+	for (i = 0; i < sizeof(s_smenu) / sizeof(s_smenu[0]) / 2; i++)
+	{
+		printf("%s\t", s_smenu[i]);	//¸Ş´ºÃâ·Â
+		Sleep(200);
+	}
+	printf("\n\n");
+	printf("\t\t\t\t");
+	for (i = 3; i < sizeof(s_smenu) / sizeof(s_smenu[0]); i++)
+	{
+		printf("%s\t", s_smenu[i]);	//¸Ş´ºÃâ·Â
+		Sleep(200);
+	}
+	
+	printf("\n\n\n\n\t\t\t\t\t¸Ş´º¸¦ ¼±ÅÃÇØÁÖ¼¼¿ä : ");
+	do
+	{
+		ch1 = getchar();	//¿øÇÏ´Â ¸Ş´º ¼±ÅÃ
+		fflush(stdin); //¿£ÅÍ¸¦´©¸£¸é ¹öÆÛ¸¦ ÀĞ¾î¿È
+	} while (ch1<'1' || ch1>'6'); //¼±ÅÃÇÑ ¸Ş´º°¡ 1~6 »çÀÌ°¡ ¾Æ´Ò°æ¿ì ´Ù½Ã ÀÔ·ÂÀ»¹ŞÀ½
+	return ch1; //¼±ÅÃÇÑ ¸Ş´ºÀÇ ÇÔ¼öÀÇ °á°ú°ªÀ¸·Î µÇµ¹¸²;
+
+}

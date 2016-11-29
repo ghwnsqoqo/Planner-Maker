@@ -13,7 +13,7 @@ void today()
 	timer = time(NULL);    // 현재 시각을 초 단위로 얻기
 	t = localtime(&timer); // 초 단위의 시간을 분리하여 구조체에 넣기
 
-	printf("\t\t\t Today : ");
+	printf("\t\t\t\t\t Today : ");
 	printf("%s\n", timeToString(t));
 	printf("\n\n");
 

@@ -1,7 +1,7 @@
 #pragma once
 char *smenu[] = { "\t\t\t\t\t1.시작", "\t\t\t\t\t2.종료 " };
 
-char select_menu(void)
+char main_select_menu(void)
 {
 	char ch; //키보드에서 입력받은 문자열을 저장할 변수 선언.
 	int i;

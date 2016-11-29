@@ -2,6 +2,7 @@
 
 void Exit()
 {
-	printf("М■└К║°Й╥╦К·╗Л²└ Л╒┘Кё▄М∙╘К▀┬К▀╓.");
+	textcolor(12);
+	printf("\n\n\t\t\t\tга╥н╠в╥╔ю╩ а╬╥Агу╢о╢ы.\n\n\t\t\t");
 	return;
 }
