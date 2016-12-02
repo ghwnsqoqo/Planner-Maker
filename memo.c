@@ -37,7 +37,7 @@ void memo_menu()
 	node *se;	   //switch 문의 case 3: 에서 찾은 노드의 주소값을 임시로 저장하기 위해서
 	int i = 0;
 
-	FILE *des = fopen("Schedule.txt", "a+t");	//파일의 내용을 기초로 연결리스트 구성을 위해 입력스트림 생성
+	FILE *des = fopen("C:\\Schedule.txt", "a+t");	//파일의 내용을 기초로 연결리스트 구성을 위해 입력스트림 생성
 
 	if (des == NULL)	//입력스트림의 생성을 확인
 	{
@@ -88,7 +88,7 @@ void memo_menu()
 				 break;
 		case'5': writefile(head);
 			textcolor(14);//노란색 글씨로 출력
-			printf("Scedule.txt파일로 저장이 완료되었습니다.\n"); 
+			printf("C드라이브에 Scedule.txt파일로 저장이 완료되었습니다.\n"); 
 			textcolor(15);//흰색 글씨로 복귀
 			Sleep(1000);
 			system("cls");
@@ -193,7 +193,7 @@ void writefile(node *phead)
 {
 	node *ptr = phead;
 	int i = '1';
-	FILE *des = fopen("Schedule.txt", "a+t");	//출력 스트림 형성
+	FILE *des = fopen("C:\\Schedule.txt", "a+t");	//출력 스트림 형성
 
 	if (ptr == NULL)
 		return;
