@@ -5,6 +5,7 @@
 //구조체 정의
 
 typedef struct schedule{ //아래 node 구조체 내의 변수중 하나
+	char s_day[20];		//스케줄 일자
 	char s_name[20];	//스케줄 이름
 	char s_memo[20];	//스케줄 내용
 }schedule;
@@ -25,6 +26,7 @@ void Exit();
 
 void memo_menu()
 {	
+	system("mode con:cols=86 lines=50");
 	system("cls");
 	today();
 	calendar_p();
@@ -35,7 +37,7 @@ void memo_menu()
 	node *se;	   //switch 문의 case 3: 에서 찾은 노드의 주소값을 임시로 저장하기 위해서
 	int i = 0;
 
-	FILE *des = fopen("Schedule.txt", "rt");	//파일의 내용을 기초로 연결리스트 구성을 위해 입력스트림 생성
+	FILE *des = fopen("Schedule.txt", "a+t");	//파일의 내용을 기초로 연결리스트 구성을 위해 입력스트림 생성
 
 	if (des == NULL)	//입력스트림의 생성을 확인
 	{
@@ -50,12 +52,14 @@ void memo_menu()
 		switch (ch1)
 		{
 		case'1': Insert(&head, Createnode());
+				 printf("일정기입완료 !");
 				 Sleep(1000); 
 				 system("cls");
 				 today();
 				 calendar_p();
 				 break;
 		case'2': Delete(&head, search(head));
+			     printf("일정삭제완료 !");
 				 Sleep(1000);
 				 system("cls");
 				 today();
@@ -64,6 +68,7 @@ void memo_menu()
 		case'3': se = search(head);
 			if (se != NULL)
 				{
+					printf("일정일 : %s\n", se->data.s_day);
 					printf("일정명 : %s\n", se->data.s_name);
 					printf("일정내용 : %s\n", se->data.s_memo);
 				}
@@ -75,14 +80,16 @@ void memo_menu()
 					system("cls");
 					today();
 					calendar_p();
-		case'4': Display(head);	
-				 Sleep(1000);
-				 system("cls");
+		case'4': system("cls"); 
 				 today();
 				 calendar_p();
+				 Sleep(1000);
+				 Display(head);
 				 break;
 		case'5': writefile(head);
+			textcolor(14);//노란색 글씨로 출력
 			printf("Scedule.txt파일로 저장이 완료되었습니다.\n"); 
+			textcolor(15);//흰색 글씨로 복귀
 			Sleep(1000);
 			system("cls");
 			today();
@@ -147,10 +154,10 @@ node * search(node*phead)
 {
 	node *ptr = phead;
 	schedule el;
-	printf("일정명 입력:");	scanf("%s", el.s_name);
+	printf("일정일 입력:");	scanf("%s", el.s_day);
 	while (ptr != NULL)
 	{
-		if (!strcmp(ptr->data.s_name, el.s_name))	//각 노드의 데이터 내의 이름과 찾을 이름을 비교
+		if (!strcmp(ptr->data.s_day, el.s_day))	//각 노드의 데이터 내의 이름과 찾을 이름을 비교
 			return ptr;	//찾을 이름을 가진 노드의 주소값을 반환
 		ptr = ptr->next;
 	}
@@ -163,16 +170,19 @@ void Display(node*head)
 	while (p != NULL)
 	{
 		printf("%d번째\n", i);
+		printf("일정일:%s\n", (p->data).s_day);
 		printf("일정명:%s\n", (p->data).s_name);
 		printf("일정내용:%s\n\n", (p->data).s_memo);
 		p = p->next;
 		i++;
 	}
+
 }
 
 node *Createnode(void)
 {
 	node *newnode = (node*)malloc(sizeof(node));		//새로운 노드 생성
+	printf("일정일 입력:");	scanf("%s", (newnode->data).s_day);	//일정일 입력
 	printf("일정명 입력:");	scanf("%s", (newnode->data).s_name);	//일정명 입력
 	printf("일정내용 입력:");	scanf("%s", (newnode->data).s_memo);	//일정내용 입력
 	newnode->next = NULL;
@@ -183,7 +193,7 @@ void writefile(node *phead)
 {
 	node *ptr = phead;
 	int i = '1';
-	FILE *des = fopen("Schedule.txt", "wt");	//출력 스트림 형성
+	FILE *des = fopen("Schedule.txt", "a+t");	//출력 스트림 형성
 
 	if (ptr == NULL)
 		return;
@@ -200,5 +210,6 @@ void writefile(node *phead)
 	}
 	fclose(des);
 	return;
-
 }
+
+
